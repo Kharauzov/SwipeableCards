@@ -26,7 +26,7 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
     
     // MARK: Properties
     
-    private(set) var cardsViewController: CardsViewController?
+    var cardsViewController: CardsViewController?
     var interactivePresentTransition: UIPercentDrivenInteractiveTransition?
     var interactiveDismissTransition: UIPercentDrivenInteractiveTransition?
     lazy var nextViewControllerInitialYPosition: CGFloat = {
@@ -36,25 +36,24 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
         return y
     }()
     var userImage: UIImage?
-    var data = [CardCellDisplayable]()
+    let storage = MockStorage.shared
     
     // MARK: Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadMockData()
         setContentFromUserImage()
         prepareViewForCustomTransition()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        bottomTriggerView.alpha = 1
+        updateViewState(isCardsContentAvailable: storage.data.isEmpty)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        bottomTriggerView.alpha = 0
+        bottomTriggerView.hide(animated: false)
     }
     
     override func viewDidLayoutSubviews() {
@@ -64,18 +63,20 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
         bottomTriggerImageViewHeightConstraint.constant = cardsViewController?.cardImageViewHeight ?? 0
     }
     
-    func loadMockData() {
-        let imageFileName = "james_bond"
-        userImage = UIImage(named: imageFileName)
-        data = [
-            CardCellDisplayable(imageViewFileName: imageFileName, title: "iOS Developer", subtitle: "Apple", details: "Animations/Transitions", qrCodeImageFileName: "qrcode"),
-            CardCellDisplayable(imageViewFileName: imageFileName, title: "Android Developer", subtitle: "Google", details: "Location/Maps", qrCodeImageFileName: "qrcode"),
-            CardCellDisplayable(imageViewFileName: imageFileName, title: "C++ Architect", subtitle: "Amazon", details: "Core", qrCodeImageFileName: "qrcode")
-        ]
+    func updateViewState(isCardsContentAvailable: Bool) {
+        if isCardsContentAvailable {
+            bottomTriggerView.show(animated: true)
+            removeCustomTransitionBehaviour()
+        } else {
+            bottomTriggerView.show(animated: false)
+            bottomTriggerImageView.image = userImage
+            prepareViewForCustomTransition()
+        }
     }
     
     func setContentFromUserImage() {
-        bottomTriggerImageView.image = userImage
+        userImage = UIImage(named: storage.imageFileName)
+        avatarImageView.image = userImage
         guard let userImage = userImage else { return }
         performBlurEffectOnImage(userImage, completion: { [weak self] (result) in
             self?.avatarImageView.image = result
@@ -94,7 +95,6 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
     
     func prepareViewForCustomTransition() {
         let nextViewController = CardsViewController.instantiateViewController()
-        nextViewController.data = data
         nextViewController.transitioningDelegate = self
         nextViewController.modalPresentationStyle = .custom
         interactivePresentTransition = MiniToLargeViewInteractiveAnimator(fromViewController: self, toViewController: nextViewController, gestureView: bottomTriggerView)
@@ -102,10 +102,17 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
         self.cardsViewController = nextViewController
     }
     
+    func removeCustomTransitionBehaviour() {
+        bottomTriggerImageView.image = nil
+        interactivePresentTransition = nil
+        interactiveDismissTransition = nil
+        cardsViewController = nil
+    }
+    
     // MARK: IBActions
     
     @IBAction func bottomTriggerButtonTapped() {
-        if let viewControllerToPresent = cardsViewController {
+        if let viewControllerToPresent = cardsViewController, !storage.data.isEmpty {
             present(viewControllerToPresent, animated: true)
         }
     }

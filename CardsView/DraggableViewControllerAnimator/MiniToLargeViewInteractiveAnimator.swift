@@ -30,6 +30,10 @@ class MiniToLargeViewInteractiveAnimator: UIPercentDrivenInteractiveTransition {
         completionSpeed = 0.6
     }
     
+    deinit {
+        pan.view?.removeGestureRecognizer(pan)
+    }
+    
     @objc func onPan(_ pan: UIPanGestureRecognizer) {
         if !isEnabled { return }
         let translation = pan.translation(in: pan.view?.superview)
@@ -49,6 +53,7 @@ class MiniToLargeViewInteractiveAnimator: UIPercentDrivenInteractiveTransition {
             update(percent)
             shouldComplete = percent > threshold
             if shouldComplete {
+                (fromViewController as? MiniToLargeAnimatable)?.prepareBeingDismissed()
                 finish()
             }
         case .ended:

@@ -12,6 +12,7 @@ import UIKit
 protocol MiniToLargeAnimatable {
     var animatableBackgroundView: UIView { get }
     var animatableMainView: UIView { get }
+    func prepareBeingDismissed()
 }
 
 class MiniToLargePresentingViewAnimator: NSObject, UIViewControllerAnimatedTransitioning {

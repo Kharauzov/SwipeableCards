@@ -86,13 +86,15 @@ extension SwipingCollectionViewCell {
             }
             if velocity.x < 200 { // moves up
                 frontContainerViewCenterY = newYPointToSet
+                if newYPointToSet < -swipeDistanceOnY {
+                    return
+                }
                 var delta: CGFloat = 0
                 if isMovingFromInitialState {
                     delta = 1 - ((swipeDistanceOnY - abs(swipeDistancePoint.y)) / swipeDistanceOnY)
                 } else {
                     delta = ((swipeDistanceOnY - abs(swipeDistancePoint.y)) / swipeDistanceOnY)
                 }
-                //debugPrint("delta \(delta)")
                 frontViewPositionChanged(on: delta)
             }
         case .ended:

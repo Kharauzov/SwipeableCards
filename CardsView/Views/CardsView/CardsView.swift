@@ -43,19 +43,33 @@ class CardsView: UICollectionView {
         collectionViewLayout = layout
     }
     
-    func scrollToItemAtIndex(_ index: Int) {
+    func scrollToItem(at index: Int) {
         if index > numberOfItems(inSection: 0) { return }
         scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
     }
     
-    func reloadItemAtIndex(_ index: Int) {
+    func reloadItem(at index: Int) {
         if index > numberOfItems(inSection: 0) { return }
         reloadItems(at: [IndexPath(row: index, section: 0)])
     }
     
-    func removeItemAtIndex(_ index: Int) {
+    func removeItem(at index: Int) {
         if index > numberOfItems(inSection: 0) { return }
         deleteItems(at: [IndexPath(row: index, section: 0)])
+    }
+    
+    func hideAllCellsExceptSelected(animated: Bool) {
+        for index in 0 ..< numberOfItems(inSection: 0) {
+            if index != currentPageIndex {
+                cellForItem(at: IndexPath(row: index, section: 0))?.hide(animated: animated)
+            }
+        }
+    }
+    
+    func showAllCells(animated: Bool) {
+        for index in 0 ..< numberOfItems(inSection: 0) {
+            cellForItem(at: IndexPath(row: index, section: 0))?.show(animated: animated)
+        }
     }
 }
 

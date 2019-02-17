@@ -43,4 +43,18 @@ extension UIView {
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
+    
+    func show(animated: Bool) {
+        let timeInterval: TimeInterval = animated ? 0.33 : 0
+        UIView.animate(withDuration: timeInterval) {
+            self.alpha = 1
+        }
+    }
+    
+    func hide(animated: Bool) {
+        let timeInterval: TimeInterval = animated ? 0.33 : 0
+        UIView.animate(withDuration: timeInterval) {
+            self.alpha = 0
+        }
+    }
 }

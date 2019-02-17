@@ -20,7 +20,7 @@ class CardsViewController: UIViewController {
     
     // MARK: Properties
     
-    var data = [CardCellDisplayable]()
+    let storage = MockStorage.shared
     var displayData = [CardCellDisplayable]()
     lazy var cardImageViewHeight: CGFloat = cardsView.frame.height * 0.45 //  45% is cell.imageView height constraint's multiplier
     
@@ -29,11 +29,11 @@ class CardsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setCardsViewLayout()
-        if let firstItem = data.first {
+        if let firstItem = storage.data.first {
             displayData.append(firstItem)
         }
         cardsView.reloadData()
-        cardsView.scrollToItemAtIndex(0)
+        cardsView.scrollToItem(at: 0)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -54,12 +54,12 @@ class CardsViewController: UIViewController {
     }
     
     func handleViewControllerPresentation() {
-        if displayData.count == data.count { return }
+        if displayData.count == storage.data.count { return }
         var indexPaths = [IndexPath]()
-        for (index, _) in data.enumerated() {
+        for (index, _) in storage.data.enumerated() {
             if index != 0 {
                 indexPaths.append(IndexPath(row: index, section: 0))
-                displayData.append(data[index])
+                displayData.append(storage.data[index])
             }
         }
         cardsView.insertItems(at: indexPaths)
@@ -67,19 +67,13 @@ class CardsViewController: UIViewController {
     
     func handleViewControllerDismiss() {
         let amountOfCells = cardsView.numberOfItems(inSection: 0)
+        if amountOfCells == 0 { return }
         var indexPathesToDelete = [IndexPath]()
         for index in (1 ..< amountOfCells).reversed() {
             indexPathesToDelete.append(IndexPath(row: index, section: 0))
             displayData.remove(at: index)
         }
         cardsView.deleteItems(at: indexPathesToDelete)
-    }
-    
-    func dismissViewManually() {
-    }
-    
-    func presentViewController(_ viewController: UIViewController) {
-        present(viewController, animated: true, completion: nil)
     }
 }
 
@@ -128,6 +122,17 @@ extension CardsViewController: CardCollectionViewCellDelegate {
         bottomView.alpha = 1 - percent
         bottomView.transform.ty = percent * 50
     }
+    
+    func deleteButtonTapped(cell: CardCollectionViewCell) {
+        if let index = cardsView.indexPath(for: cell)?.row {
+            storage.data.remove(at: index)
+            displayData.remove(at: index)
+            cardsView.removeItem(at: index)
+        }
+        if displayData.isEmpty {
+            dismiss(animated: true, completion: nil)
+        }
+    }
 }
 
 extension CardsViewController: MiniToLargeAnimatable {
@@ -137,5 +142,9 @@ extension CardsViewController: MiniToLargeAnimatable {
     
     var animatableMainView: UIView {
         return contentView
+    }
+    
+    func prepareBeingDismissed() {
+        cardsView.hideAllCellsExceptSelected(animated: true)
     }
 }

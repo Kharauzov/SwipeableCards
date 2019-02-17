@@ -11,6 +11,7 @@
 		4959017B22108CFB00CA8E1A /* MiniToLargePresentingViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4959017A22108CFB00CA8E1A /* MiniToLargePresentingViewAnimator.swift */; };
 		4959017D2210A38900CA8E1A /* MiniToLargeDismissingViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4959017C2210A38900CA8E1A /* MiniToLargeDismissingViewAnimator.swift */; };
 		4959017F2210A88200CA8E1A /* MiniToLargeViewInteractiveAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4959017E2210A88200CA8E1A /* MiniToLargeViewInteractiveAnimator.swift */; };
+		498548BB22188BF500CCCA1C /* MockStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498548BA22188BF500CCCA1C /* MockStorage.swift */; };
 		498EED7B2211B2E400D6BB61 /* InteractiveTransitionableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498EED7A2211B2E400D6BB61 /* InteractiveTransitionableViewController.swift */; };
 		49E05B7F22117BD9000CBEF2 /* CardCellDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E05B7E22117BD9000CBEF2 /* CardCellDisplayable.swift */; };
 		49ED7159220C2C2400755505 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ED7158220C2C2400755505 /* AppDelegate.swift */; };
@@ -33,6 +34,7 @@
 		4959017A22108CFB00CA8E1A /* MiniToLargePresentingViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniToLargePresentingViewAnimator.swift; sourceTree = "<group>"; };
 		4959017C2210A38900CA8E1A /* MiniToLargeDismissingViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniToLargeDismissingViewAnimator.swift; sourceTree = "<group>"; };
 		4959017E2210A88200CA8E1A /* MiniToLargeViewInteractiveAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniToLargeViewInteractiveAnimator.swift; sourceTree = "<group>"; };
+		498548BA22188BF500CCCA1C /* MockStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStorage.swift; sourceTree = "<group>"; };
 		498EED7A2211B2E400D6BB61 /* InteractiveTransitionableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveTransitionableViewController.swift; sourceTree = "<group>"; };
 		49E05B7E22117BD9000CBEF2 /* CardCellDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCellDisplayable.swift; sourceTree = "<group>"; };
 		49ED7155220C2C2400755505 /* CardsView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CardsView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +160,7 @@
 			children = (
 				49ED71F3220C3CC200755505 /* Storyboard.swift */,
 				49E05B7E22117BD9000CBEF2 /* CardCellDisplayable.swift */,
+				498548BA22188BF500CCCA1C /* MockStorage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				49ED7159220C2C2400755505 /* AppDelegate.swift in Sources */,
 				49E05B7F22117BD9000CBEF2 /* CardCellDisplayable.swift in Sources */,
 				49ED7173220C2D2D00755505 /* CardsViewController.swift in Sources */,
+				498548BB22188BF500CCCA1C /* MockStorage.swift in Sources */,
 				4959017D2210A38900CA8E1A /* MiniToLargeDismissingViewAnimator.swift in Sources */,
 				49ED71F4220C3CC200755505 /* Storyboard.swift in Sources */,
 				49ED717D220C2D4000755505 /* StartViewController.swift in Sources */,

@@ -11,6 +11,7 @@ import UIKit
 protocol CardCollectionViewCellDelegate: class {
     /// 'percent' is a CGFloat value from 0 to 1.
     func frontViewPositionChanged(_ cell: CardCollectionViewCell, on percent: CGFloat)
+    func deleteButtonTapped(cell: CardCollectionViewCell)
 }
 
 class CardCollectionViewCell: SwipingCollectionViewCell {
@@ -48,10 +49,6 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
         frontContentView.center = backContentView.center // setting default position of cell's frontContentView when cell is reused
     }
     
-    deinit {
-        debugPrint(self)
-    }
-    
     // MARK: Methods
     
     func setContent(data: CardCellDisplayable) {
@@ -65,7 +62,6 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     override func frontViewPositionChanged(on percent: CGFloat) {
         actionResponder?.frontViewPositionChanged(self, on: percent)
         
-        //debugPrint(percent)
         action3Button.alpha = percent
         action2Button.alpha = percent
         action1Button.alpha = percent
@@ -112,8 +108,9 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     }
     
     @IBAction private func deleteButtonTapped(_ sender: Any) {
-        handleButtonTap { 
-            //self.actionResponder?.deleteButtonTapped(cell: self)
+        handleButtonTap { [weak self] in
+            guard let self = self else { return }
+            self.actionResponder?.deleteButtonTapped(cell: self)
         }
     }
 }
