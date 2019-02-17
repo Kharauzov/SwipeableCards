@@ -74,6 +74,11 @@ class CardsView: UICollectionView {
 }
 
 extension CardsView: UICollectionViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let pageWidth = Float(cellWidth + cellLineSpaceValue)
+        currentPageIndex = Int(floor((Float(contentOffset.x) - Float(pageWidth) / 2) / Float(pageWidth)) + 1.0)
+    }
+    
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let pageWidth = Float(cellWidth + cellLineSpaceValue)
         let targetXContentOffset = Float(targetContentOffset.pointee.x)

@@ -48,7 +48,7 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateViewState(isCardsContentAvailable: storage.data.isEmpty)
+        updateViewState(isCardsContentAvailable: !storage.data.isEmpty)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,12 +65,12 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
     
     func updateViewState(isCardsContentAvailable: Bool) {
         if isCardsContentAvailable {
-            bottomTriggerView.show(animated: true)
-            removeCustomTransitionBehaviour()
-        } else {
             bottomTriggerView.show(animated: false)
             bottomTriggerImageView.image = userImage
             prepareViewForCustomTransition()
+        } else {
+            bottomTriggerView.show(animated: true)
+            removeCustomTransitionBehaviour()
         }
     }
     
