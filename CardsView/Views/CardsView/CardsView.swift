@@ -56,6 +56,13 @@ class CardsView: UICollectionView {
     func removeItem(at index: Int) {
         if index > numberOfItems(inSection: 0) { return }
         deleteItems(at: [IndexPath(row: index, section: 0)])
+        currentPageIndex = getVisibleCardIndexPath()?.row ?? 0
+    }
+    
+    func getVisibleCardIndexPath() -> IndexPath? {
+        let visibleRect = CGRect(origin: contentOffset, size: bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        return indexPathForItem(at: visiblePoint)
     }
     
     func hideAllCellsExceptSelected(animated: Bool) {
