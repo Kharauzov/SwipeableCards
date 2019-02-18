@@ -8,44 +8,52 @@
 
 import UIKit
 
-// Protocol to inform that cell is being swiped up or down.
- protocol SwipingCollectionViewCellDelegate : class {
+protocol SwipingCollectionViewCellDelegate : class {
+    /// 'progress' is a CGFloat value from 0 to 1.
+    func cellSwipe(_ cell: SwipingCollectionViewCell, with progress: CGFloat)
     func cellSwipedUp(_ cell: SwipingCollectionViewCell)
     func cellReturnedToInitialState(_ cell: SwipingCollectionViewCell)
 }
 
-open class SwipingCollectionViewCell: UICollectionViewCell {
+class SwipingCollectionViewCell: UICollectionViewCell {
     
     // MARK: IBOutlets
     
     @IBOutlet weak var frontContentView: UIView!
     @IBOutlet weak var backContentView: UIView!
     
-    // MARK: Public properties
+    // MARK: Properties
     
     weak var delegate: SwipingCollectionViewCellDelegate?
-    var swipeDistanceOnY: CGFloat = 0
-    var swipeDistancePoint = CGPoint() //Distance of the swipe over "x" & "y" axis.
-    var originalPoint = CGPoint()
-    var isMovingFromInitialState = true
-    var frontContainerViewCenterY: CGFloat {
+    private var swipeDistanceOnY: CGFloat = 0
+    private var swipeDistancePoint = CGPoint() //Distance of the swipe over "x" & "y" axis.
+    private var originalPoint = CGPoint()
+    private var isMovingFromInitialState = true
+    private var frontContainerViewCenterY: CGFloat {
         set {
             frontContentView.transform.ty = newValue
         } get {
             return frontContentView.transform.ty
         }
     }
-    lazy var frontContainerViewInitialCenterY = self.frontContainerViewCenterY
-    lazy var pan: UIPanGestureRecognizer = {
+    private lazy var frontContainerViewInitialCenterY = self.frontContainerViewCenterY
+    private lazy var pan: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
         pan.delegate = self
         return pan
     }()
     
+    // MARK: Methods
+    
     open override func awakeFromNib() {
         super.awakeFromNib()
         _ = frontContainerViewInitialCenterY
         addGestureRecognizer(pan)
+        clipsToBounds = false
+    }
+    
+    override func prepareForReuse() {
+        frontContentView.center = backContentView.center // setting default position of cell's frontContentView when cell is reused
     }
     
     /// Called, when user tapped on any of the buttons at frontView of cell.
@@ -57,6 +65,11 @@ open class SwipingCollectionViewCell: UICollectionViewCell {
     
     /// 'percent' is a CGFloat value from 0 to 1.
     func frontViewPositionChanged(on percent: CGFloat) {
+        delegate?.cellSwipe(self, with: percent)
+    }
+    
+    func setSwipeDistanceValue(_ value: CGFloat) {
+        swipeDistanceOnY = value
     }
 }
 

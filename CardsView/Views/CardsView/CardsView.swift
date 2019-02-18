@@ -10,11 +10,15 @@ import UIKit
 
 class CardsView: UICollectionView {
 
+    // MARK: Properties
+    
     private var currentPageIndex = 0
     private let cellLineSpaceValue: CGFloat = 18.0 // for space between cells
     private let cellLeadingConstant: CGFloat = 30.0 // for adding spaces to cell's width from left & right sides
     private var cellWidth: CGFloat = 0
     private var cellHeight: CGFloat = 0
+    
+    // MARK: Methods
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)

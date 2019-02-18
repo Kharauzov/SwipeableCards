@@ -8,9 +8,7 @@
 
 import UIKit
 
-protocol CardCollectionViewCellDelegate: class {
-    /// 'percent' is a CGFloat value from 0 to 1.
-    func frontViewPositionChanged(_ cell: CardCollectionViewCell, on percent: CGFloat)
+protocol CardCollectionViewCellActionsHandler: class {
     func deleteButtonTapped(cell: CardCollectionViewCell)
 }
 
@@ -31,25 +29,18 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
-    // MARK: Public properties
+    // MARK: Properties
     
-    weak var actionResponder: CardCollectionViewCellDelegate?
+    weak var actionsHandler: CardCollectionViewCellActionsHandler?
     
-    // MARK: Lifecycle
+    // MARK: Methods
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        swipeDistanceOnY = actionsView.bounds.height
+        setSwipeDistanceValue(actionsView.bounds.height)
         backContentView.layer.cornerRadius = 10.0
         frontContentView.layer.cornerRadius = 10.0
-        clipsToBounds = false
     }
-    
-    override func prepareForReuse() {
-        frontContentView.center = backContentView.center // setting default position of cell's frontContentView when cell is reused
-    }
-    
-    // MARK: Methods
     
     func setContent(data: CardCellDisplayable) {
         avatarImageView.image = UIImage(named: data.imageViewFileName)
@@ -60,8 +51,7 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     }
     
     override func frontViewPositionChanged(on percent: CGFloat) {
-        actionResponder?.frontViewPositionChanged(self, on: percent)
-        
+        super.frontViewPositionChanged(on: percent)
         action3Button.alpha = percent
         action2Button.alpha = percent
         action1Button.alpha = percent
@@ -69,16 +59,13 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
         shareButton.alpha = percent
         deleteButton.alpha = percent
         
-        var fixedPercent = percent / 4 + 0.75
-        if fixedPercent > 1 {
-            fixedPercent = 1
-        }
-        action3Button.transform = CGAffineTransform(scaleX: fixedPercent, y: fixedPercent)
-        action2Button.transform = CGAffineTransform(scaleX: fixedPercent, y: fixedPercent)
-        action1Button.transform = CGAffineTransform(scaleX: fixedPercent, y: fixedPercent)
-        editButton.transform = CGAffineTransform(scaleX: fixedPercent, y: fixedPercent)
-        shareButton.transform = CGAffineTransform(scaleX: fixedPercent, y: fixedPercent)
-        deleteButton.transform = CGAffineTransform(scaleX: fixedPercent, y: fixedPercent)
+        let transformPercent = min(percent / 4 + 0.75, 1)
+        action3Button.transform = CGAffineTransform(scaleX: transformPercent, y: transformPercent)
+        action2Button.transform = CGAffineTransform(scaleX: transformPercent, y: transformPercent)
+        action1Button.transform = CGAffineTransform(scaleX: transformPercent, y: transformPercent)
+        editButton.transform = CGAffineTransform(scaleX: transformPercent, y: transformPercent)
+        shareButton.transform = CGAffineTransform(scaleX: transformPercent, y: transformPercent)
+        deleteButton.transform = CGAffineTransform(scaleX: transformPercent, y: transformPercent)
     }
     
     private func handleButtonTap(completion: @escaping () -> Void) {
@@ -91,30 +78,26 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     
     @IBAction private func action1ButtonTapped(_ sender: Any) {
         handleButtonTap {
-            //self.actionResponder?.recieveReviewsButtonTapped(cell: self)
+            // todo
         }
     }
     
     @IBAction private func editButtonTapped(_ sender: Any) {
         handleButtonTap { 
-            //self.actionResponder?.editButtonTapped(cell: self)
+            // todo
         }
     }
     
     @IBAction private func shareButtonTapped(_ sender: Any) {
         handleButtonTap { 
-            //self.actionResponder?.shareButtonTapped(cell: self)
+            // todo
         }
     }
     
     @IBAction private func deleteButtonTapped(_ sender: Any) {
         handleButtonTap { [weak self] in
             guard let self = self else { return }
-            self.actionResponder?.deleteButtonTapped(cell: self)
+            self.actionsHandler?.deleteButtonTapped(cell: self)
         }
     }
 }
-
-
-
-

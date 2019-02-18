@@ -96,12 +96,17 @@ extension CardsViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CardCollectionViewCell.reuseIdentifier, for: indexPath) as! CardCollectionViewCell
         cell.setContent(data: displayData[indexPath.row])
         cell.delegate = self
-        cell.actionResponder = self
+        cell.actionsHandler = self
         return cell
     }
 }
 
 extension CardsViewController: SwipingCollectionViewCellDelegate {
+    func cellSwipe(_ cell: SwipingCollectionViewCell, with progress: CGFloat) {
+        bottomView.alpha = 1 - progress
+        bottomView.transform.ty = progress * 50
+    }
+    
     func cellSwipedUp(_ cell: SwipingCollectionViewCell) {
         if let interactiveTransitionableViewController = presentingViewController as? InteractiveTransitionableViewController,
             let interactiveDismissTransition = interactiveTransitionableViewController.interactiveDismissTransition as? MiniToLargeViewInteractiveAnimator {
@@ -117,12 +122,7 @@ extension CardsViewController: SwipingCollectionViewCellDelegate {
     }
 }
 
-extension CardsViewController: CardCollectionViewCellDelegate {
-    func frontViewPositionChanged(_ cell: CardCollectionViewCell, on percent: CGFloat) {
-        bottomView.alpha = 1 - percent
-        bottomView.transform.ty = percent * 50
-    }
-    
+extension CardsViewController: CardCollectionViewCellActionsHandler {
     func deleteButtonTapped(cell: CardCollectionViewCell) {
         if let index = cardsView.indexPath(for: cell)?.row {
             storage.data.remove(at: index)
