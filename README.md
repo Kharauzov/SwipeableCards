@@ -3,8 +3,12 @@
 [![License](https://img.shields.io/badge/license-mit-blue.svg)](https://doge.mit-license.org)
 
 ## Overview
-This project demonstrates possibilities of **UIViewControllerAnimatedTransitioning** and **UIPercentDrivenInteractiveTransition** protocols for creating custom interactive transitions at iOS.
-Also it shows, how injection of **UIGestureRecognizer** object can expand possibilities of UICollectionView’s cells and distinguish it from the rest of the screen’s components.
+The idea of the project is to show implemented concept of how content could be provided to the user and in what way the user could interact with it considering modern trends. 
+
+Main two things, that project demonstrates are:
+
+- Possibilities of `UIViewControllerAnimatedTransitioning` and `UIViewControllerInteractiveTransitioning` protocols for creating custom interactive transitions at iOS.
+- Injection of `UIGestureRecognizer` object can expand possibilities of UICollectionView’s cells and distinguish it from the rest of the screen’s components.
 
 ## Presentation
 <p align="left">
