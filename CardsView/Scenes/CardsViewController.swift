@@ -33,7 +33,6 @@ class CardsViewController: UIViewController {
             displayData.append(firstItem)
         }
         cardsView.reloadData()
-        cardsView.scrollToItem(at: 0)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,6 +54,7 @@ class CardsViewController: UIViewController {
     
     func handleViewControllerPresentation() {
         if displayData.count == storage.data.count { return }
+        cardsView.scrollToItem(at: 0)
         var indexPaths = [IndexPath]()
         for (index, _) in storage.data.enumerated() {
             if index != 0 {
@@ -109,14 +109,14 @@ extension CardsViewController: SwipingCollectionViewCellDelegate {
     
     func cellSwipedUp(_ cell: SwipingCollectionViewCell) {
         if let interactiveTransitionableViewController = presentingViewController as? InteractiveTransitionableViewController,
-            let interactiveDismissTransition = interactiveTransitionableViewController.interactiveDismissTransition as? MiniToLargeViewInteractiveAnimator {
+            let interactiveDismissTransition = interactiveTransitionableViewController.interactiveDismissTransition {
             interactiveDismissTransition.isEnabled = false
         }
     }
     
     func cellReturnedToInitialState(_ cell: SwipingCollectionViewCell) {
         if let interactiveTransitionableViewController = presentingViewController as? InteractiveTransitionableViewController,
-            let interactiveDismissTransition = interactiveTransitionableViewController.interactiveDismissTransition as? MiniToLargeViewInteractiveAnimator {
+            let interactiveDismissTransition = interactiveTransitionableViewController.interactiveDismissTransition {
             interactiveDismissTransition.isEnabled = true
         }
     }

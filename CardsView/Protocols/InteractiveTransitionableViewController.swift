@@ -10,6 +10,6 @@ import Foundation
 import UIKit
 
 protocol InteractiveTransitionableViewController {
-    var interactivePresentTransition: UIPercentDrivenInteractiveTransition? { get }
-    var interactiveDismissTransition: UIPercentDrivenInteractiveTransition? { get }
+    var interactivePresentTransition: MiniToLargeViewInteractiveAnimator? { get }
+    var interactiveDismissTransition: MiniToLargeViewInteractiveAnimator? { get }
 }

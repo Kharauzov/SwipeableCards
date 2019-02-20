@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-class StartViewController: UIViewController, InteractiveTransitionableViewController {
-
+class StartViewController: UIViewController {
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -26,24 +26,15 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
     
     // MARK: Properties
     
-    var cardsViewController: CardsViewController?
-    var interactivePresentTransition: UIPercentDrivenInteractiveTransition?
-    var interactiveDismissTransition: UIPercentDrivenInteractiveTransition?
-    lazy var nextViewControllerInitialYPosition: CGFloat = {
-        let bottomTriggerViewHeight = self.bottomTriggerView.frame.height
-        let cardsViewYPosition = self.cardsViewController?.cardsView.frame.minY ?? 0
-        let y = bottomTriggerViewHeight + cardsViewYPosition
-        return y
-    }()
     var userImage: UIImage?
     let storage = MockStorage.shared
+    let transition = MiniToLargeTransitionCoordinator()
     
     // MARK: Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setContentFromUserImage()
-        prepareViewForCustomTransition()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,18 +50,19 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         mainContainerView.roundAllCorners(cornerRadii: 10.0)
-        bottomTriggerView.roundedCorners(top: true, cornerRadii: 10.0)
-        bottomTriggerImageViewHeightConstraint.constant = cardsViewController?.cardImageViewHeight ?? 0
+        bottomTriggerView.roundCorners(top: true, cornerRadii: 10.0)
+        bottomTriggerImageViewHeightConstraint.constant = transition.bottomTriggerImageViewHeight
     }
     
     func updateViewState(isCardsContentAvailable: Bool) {
         if isCardsContentAvailable {
             bottomTriggerView.show(animated: false)
             bottomTriggerImageView.image = userImage
-            prepareViewForCustomTransition()
+            transition.prepareViewForCustomTransition(fromViewController: self)
         } else {
             bottomTriggerView.show(animated: true)
-            removeCustomTransitionBehaviour()
+            bottomTriggerImageView.image = nil
+            transition.removeCustomTransitionBehaviour()
         }
     }
     
@@ -93,26 +85,10 @@ class StartViewController: UIViewController, InteractiveTransitionableViewContro
         }
     }
     
-    func prepareViewForCustomTransition() {
-        let nextViewController = CardsViewController.instantiateViewController()
-        nextViewController.transitioningDelegate = self
-        nextViewController.modalPresentationStyle = .custom
-        interactivePresentTransition = MiniToLargeViewInteractiveAnimator(fromViewController: self, toViewController: nextViewController, gestureView: bottomTriggerView)
-        interactiveDismissTransition = MiniToLargeViewInteractiveAnimator(fromViewController: nextViewController, toViewController: nil, gestureView: nextViewController.view)
-        self.cardsViewController = nextViewController
-    }
-    
-    func removeCustomTransitionBehaviour() {
-        bottomTriggerImageView.image = nil
-        interactivePresentTransition = nil
-        interactiveDismissTransition = nil
-        cardsViewController = nil
-    }
-    
     // MARK: IBActions
     
     @IBAction func bottomTriggerButtonTapped() {
-        if let viewControllerToPresent = cardsViewController, !storage.data.isEmpty {
+        if let viewControllerToPresent = transition.toViewController, !storage.data.isEmpty {
             present(viewControllerToPresent, animated: true)
         }
     }
@@ -124,32 +100,11 @@ extension StartViewController {
     }
 }
 
-extension StartViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return MiniToLargePresentingViewAnimator(initialY: nextViewControllerInitialYPosition)
+extension StartViewController: InteractiveTransitionableViewController {
+    var interactivePresentTransition: MiniToLargeViewInteractiveAnimator? {
+        return transition.interactivePresentTransition
     }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return MiniToLargeDismissingViewAnimator(initialY: nextViewControllerInitialYPosition)
-    }
-    
-    func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let presentInteractor = interactivePresentTransition as? MiniToLargeViewInteractiveAnimator else {
-            return nil
-        }
-        guard presentInteractor.isTransitionInProgress else {
-            return nil
-        }
-        return presentInteractor
-    }
-    
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let dismissInteractor = interactiveDismissTransition as? MiniToLargeViewInteractiveAnimator else {
-            return nil
-        }
-        guard dismissInteractor.isTransitionInProgress else {
-            return nil
-        }
-        return dismissInteractor
+    var interactiveDismissTransition: MiniToLargeViewInteractiveAnimator? {
+        return transition.interactiveDismissTransition
     }
 }

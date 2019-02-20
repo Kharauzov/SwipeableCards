@@ -29,13 +29,9 @@ class MiniToLargePresentingViewAnimator: NSObject, UIViewControllerAnimatedTrans
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromVC = transitionContext.viewController(forKey: .from) else {
-            return
-        }
-        guard let toVC = transitionContext.viewController(forKey: .to) else {
-            return
-        }
-        guard let animatableToVC = toVC as? MiniToLargeAnimatable else {
+        guard let fromVC = transitionContext.viewController(forKey: .from),
+            let toVC = transitionContext.viewController(forKey: .to),
+            let animatableToVC = toVC as? MiniToLargeAnimatable else {
             return
         }
         let fromVCRect = transitionContext.initialFrame(for: fromVC)

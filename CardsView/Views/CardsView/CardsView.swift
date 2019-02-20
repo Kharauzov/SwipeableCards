@@ -50,6 +50,7 @@ class CardsView: UICollectionView {
     func scrollToItem(at index: Int) {
         if index > numberOfItems(inSection: 0) { return }
         scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
+        currentPageIndex = index
     }
     
     func reloadItem(at index: Int) {
