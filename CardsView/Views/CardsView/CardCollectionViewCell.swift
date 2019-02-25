@@ -38,7 +38,6 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setSwipeDistanceValue(actionsView.bounds.height)
-        backContentView.layer.cornerRadius = 10.0
         frontContentView.layer.cornerRadius = 10.0
     }
     

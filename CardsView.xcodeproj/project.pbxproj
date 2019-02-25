@@ -89,8 +89,8 @@
 		498EED792211B2B500D6BB61 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				49ED71EC220C3C3000755505 /* ReusableView.swift */,
 				498EED7A2211B2E400D6BB61 /* InteractiveTransitionableViewController.swift */,
+				49ED71EC220C3C3000755505 /* ReusableView.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";

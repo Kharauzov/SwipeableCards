@@ -20,7 +20,6 @@ class SwipingCollectionViewCell: UICollectionViewCell {
     // MARK: IBOutlets
     
     @IBOutlet weak var frontContentView: UIView!
-    @IBOutlet weak var backContentView: UIView!
     
     // MARK: Properties
     
@@ -53,7 +52,7 @@ class SwipingCollectionViewCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        frontContentView.center = backContentView.center // setting default position of cell's frontContentView when cell is reused
+        frontContentView.transform = .identity
     }
     
     /// Called, when user tapped on any of the buttons at frontView of cell.

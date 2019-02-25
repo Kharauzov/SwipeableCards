@@ -13,7 +13,11 @@ class MiniToLargeViewInteractiveAnimator: UIPercentDrivenInteractiveTransition {
     let fromViewController: UIViewController
     let toViewController: UIViewController?
     var isTransitionInProgress = false
-    var isEnabled = true
+    var isEnabled = true {
+        didSet {
+            pan.isEnabled = isEnabled
+        }
+    }
     private var shouldComplete = false
     private let threshold: CGFloat = 0.3
     private let targetScreenHeight = UIScreen.main.bounds.height - 150
@@ -37,7 +41,6 @@ class MiniToLargeViewInteractiveAnimator: UIPercentDrivenInteractiveTransition {
     }
     
     @objc func onPan(_ pan: UIPanGestureRecognizer) {
-        if !isEnabled { return }
         let translation = pan.translation(in: pan.view?.superview)
         switch pan.state {
         case .began:
