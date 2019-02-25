@@ -15,18 +15,20 @@ class MiniToLargeViewInteractiveAnimator: UIPercentDrivenInteractiveTransition {
     var isTransitionInProgress = false
     var isEnabled = true
     private var shouldComplete = false
-    private let pan: UIPanGestureRecognizer
     private let threshold: CGFloat = 0.3
     private let targetScreenHeight = UIScreen.main.bounds.height - 150
     private lazy var dragAmount = toViewController == nil ? targetScreenHeight : -targetScreenHeight
+    private lazy var pan: UIPanGestureRecognizer = {
+        let pan = UIPanGestureRecognizer()
+        pan.addTarget(self, action: #selector(onPan(_:)))
+        return pan
+    }()
     
     init(fromViewController: UIViewController, toViewController: UIViewController?, gestureView: UIView) {
         self.fromViewController = fromViewController
         self.toViewController = toViewController
-        self.pan = UIPanGestureRecognizer()
         super.init()
-        pan.addTarget(self, action: #selector(onPan(_:)))
-        gestureView.addGestureRecognizer(pan)
+        gestureView.addGestureRecognizer(self.pan)
         completionSpeed = 0.6
     }
     
