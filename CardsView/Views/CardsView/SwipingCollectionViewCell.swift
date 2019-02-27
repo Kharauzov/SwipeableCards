@@ -24,7 +24,9 @@ class SwipingCollectionViewCell: UICollectionViewCell {
     // MARK: Properties
     
     weak var delegate: SwipingCollectionViewCellDelegate?
-    private var swipeDistanceOnY: CGFloat = 0
+    var swipeDistanceOnY: CGFloat {
+        fatalError("This property must be override")
+    }
     private var swipeDistancePoint = CGPoint() //Distance of the swipe over "x" & "y" axis.
     private var originalPoint = CGPoint()
     private var isMovingFromInitialState = true
@@ -44,7 +46,7 @@ class SwipingCollectionViewCell: UICollectionViewCell {
     
     // MARK: Methods
     
-    open override func awakeFromNib() {
+    override func awakeFromNib() {
         super.awakeFromNib()
         _ = frontContainerViewInitialCenterY
         addGestureRecognizer(pan)
@@ -66,25 +68,20 @@ class SwipingCollectionViewCell: UICollectionViewCell {
     func frontViewPositionChanged(on percent: CGFloat) {
         delegate?.cellSwipe(self, with: percent)
     }
-    
-    func setSwipeDistanceValue(_ value: CGFloat) {
-        swipeDistanceOnY = value
-    }
 }
 
 // MARK: Swiping logic
 
 extension SwipingCollectionViewCell {
     private struct Constants {
-        static let swipeDistanceToTakeAction: CGFloat = UIScreen.main.bounds.size.height / 5 //Distance required for the cell to go off the screen.
-        static let swipeImageAnimationDuration: TimeInterval = 0.3 //Duration of the Animation when Swiping Up/Down.
-        static let centerImageAnimationDuration: TimeInterval = 0.3 //Duration of the Animation when image gets back to original postion.
+        static let swipeDistanceToTakeAction: CGFloat = UIScreen.main.bounds.size.height / 5 // Distance required for the cell to go off the screen.
+        static let swipeImageAnimationDuration: TimeInterval = 0.3 // Duration of the Animation when Swiping Up/Down.
+        static let centerImageAnimationDuration: TimeInterval = 0.3 // Duration of the Animation when image gets back to original postion.
     }
     
     @objc fileprivate func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         swipeDistancePoint = sender.translation(in: frontContentView) //Get the distance of the Swipe on "y" axis.
         let velocity = sender.velocity(in: frontContentView)
-        //debugPrint("velocity \(velocity)")
         switch sender.state {
         case .began:
             originalPoint.y = frontContainerViewCenterY
@@ -96,7 +93,7 @@ extension SwipingCollectionViewCell {
                 }
                 return
             }
-            if velocity.x < 200 { // moves up
+            if velocity.x < 200 { // move up
                 frontContainerViewCenterY = newYPointToSet
                 if newYPointToSet < -swipeDistanceOnY {
                     return
@@ -110,7 +107,7 @@ extension SwipingCollectionViewCell {
                 frontViewPositionChanged(on: delta)
             }
         case .ended:
-            //Take action after the Swipe gesture ends.
+            // Take action after the swipe gesture ends.
             afterSwipeAction()
         default:
             break
@@ -168,7 +165,7 @@ extension SwipingCollectionViewCell {
 // MARK: UIGestureRecognizerDelegate
 
 extension SwipingCollectionViewCell: UIGestureRecognizerDelegate {
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }

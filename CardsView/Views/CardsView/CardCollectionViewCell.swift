@@ -32,12 +32,14 @@ class CardCollectionViewCell: SwipingCollectionViewCell {
     // MARK: Properties
     
     weak var actionsHandler: CardCollectionViewCellActionsHandler?
+    override var swipeDistanceOnY: CGFloat {
+        return actionsView.bounds.height
+    }
     
     // MARK: Methods
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setSwipeDistanceValue(actionsView.bounds.height)
         frontContentView.layer.cornerRadius = 10.0
     }
     
