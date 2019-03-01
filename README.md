@@ -10,6 +10,10 @@ Main two things, that project demonstrates are:
 - Possibilities of `UIViewControllerAnimatedTransitioning` and `UIViewControllerInteractiveTransitioning` protocols for creating custom interactive transitions at iOS.
 - Injection of `UIGestureRecognizer` object can expand possibilities of UICollectionView’s cells and distinguish it from the rest of the screen’s components.
 
+I wrote an article on Medium, where described main parts of this project.
+
+https://medium.com/@sergkharauzov/make-draggable-uiviewcontroller-with-swipe-cards-using-custom-transitions-in-ios-c96f581639e0
+
 ## Presentation
 <p align="left">
 <img src="https://github.com/Kharauzov/SwipeableCards/blob/master/demo.gif" width="360px" height="578px"/>
