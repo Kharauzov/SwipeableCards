@@ -1,4 +1,4 @@
-![Swift](https://img.shields.io/badge/Swift-4.2-orange.svg)
+![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)
 ![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)
 [![License](https://img.shields.io/badge/license-mit-blue.svg)](https://doge.mit-license.org)
 
@@ -27,4 +27,4 @@ https://medium.com/@sergkharauzov/make-draggable-uiviewcontroller-with-swipe-car
 If you have any questions or suggestions, feel free to open issue just at this project.
 
 ## License
-NiceDemo and all its classes are available under the MIT license. See the LICENSE file for more info.
+SwipeableCards and all its classes are available under the MIT license. See the LICENSE file for more info.
