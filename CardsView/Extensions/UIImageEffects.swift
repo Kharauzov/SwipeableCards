@@ -1,8 +1,8 @@
 import UIKit
 import Accelerate
 
-public extension UIImage {
-    public func applyBlurWithRadius(_ blurRadius: CGFloat, tintColor: UIColor?, saturationDeltaFactor: CGFloat, maskImage: UIImage? = nil, completion: @escaping (_ result: UIImage?) -> Void) {
+extension UIImage {
+    func applyBlurWithRadius(_ blurRadius: CGFloat, tintColor: UIColor?, saturationDeltaFactor: CGFloat, maskImage: UIImage? = nil, completion: @escaping (_ result: UIImage?) -> Void) {
         // Check pre-conditions.
         if (size.width < 1 || size.height < 1) {
             print("*** error: invalid size: \(size.width) x \(size.height). Both dimensions must be >= 1: \(self)")
